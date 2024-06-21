@@ -1,0 +1,49 @@
+# This  Elasticsearchquery searches the "prices-cataclysms-crimes-1975-2020" index for correlations 
+between crime counts and cataclysms from 1995 to 2000, aggregating monthly data on total crimes, 
+cataclysm days, and the most common crime and cataclysm types. #
+
+GET /prices-cataclysms-crimes-1975-2020/_search
+{
+	"size": 0,
+	"query": {
+		"range": {
+			"date": {
+				"gte": "1995-01-01",
+				"lte": "2000-12-31",
+				"format": "yyyy-MM-dd"
+			}
+		}
+	},
+	"aggs": {
+		"crime_cataclysm_correlation": {
+			"date_histogram": {
+				"field": "date",
+				"calendar_interval": "month"
+			},
+			"aggs": {
+				"total_crimes": {
+					"sum": {
+						"field": "crime_total_count"
+					}
+				},
+				"total_cataclysm_days": {
+					"sum": {
+						"field": "cataclysm_total_count"
+					}
+				},
+				"most_common_crime": {
+					"terms": {
+						"field": "crime_types.keyword",
+						"size": 1
+					}
+				},
+				"most_common_cataclysm": {
+					"terms": {
+						"field": "cataclysm_types.keyword",
+						"size": 1
+					}
+				}
+			}
+		}
+	}
+}

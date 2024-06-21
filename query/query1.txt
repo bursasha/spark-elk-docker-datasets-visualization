@@ -1,0 +1,21 @@
+# This Elasticsearch query aggregates and returns the top 15 most common crime types and 
+victim groups from the "prices-cataclysms-crimes-1975-2020" index. #
+
+GET /prices-cataclysms-crimes-1975-2020/_search
+{
+	"size": 0,
+	"aggs": {
+		"crime_types_distribution": {
+			"terms": {
+				"field": "crime_types.keyword",
+				"size": 15
+			}
+		},
+		"crime_victim_groups_distribution": {
+			"terms": {
+				"field": "crime_victim_groups.keyword",
+				"size": 15
+			}
+		}
+	}
+}

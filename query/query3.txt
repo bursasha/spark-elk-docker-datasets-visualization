@@ -1,0 +1,61 @@
+# This Elasticsearch query examines the "prices-cataclysms-crimes-1975-2020" index for average prices of wheat, 
+coffee, and corn, along with types and descriptions of cataclysms, on a weekly basis throughout 1992. #
+
+GET /prices-cataclysms-crimes-1975-2020/_search
+{
+	"size": 0,
+	"query": {
+		"bool": {
+			"filter": [
+				{
+					"range": {
+						"date": {
+							"gte": "1992-01-01",
+							"lte": "1992-12-31",
+							"format": "yyyy-MM-dd"
+						}
+					}
+				}
+			]
+		}
+	},
+	"aggs": {
+		"price_fluctuations_during_cataclysms": {
+			"date_histogram": {
+				"field": "date",
+				"calendar_interval": "week"
+			},
+			"aggs": {
+				"avg_wheat_price": {
+					"avg": {
+						"field": "wheat_avg_price_per_pound"
+					}
+				},
+				"avg_coffee_price": {
+					"avg": {
+						"field": "coffee_avg_price_per_pound"
+					}
+				},
+				"avg_corn_price": {
+					"avg": {
+						"field": "corn_avg_price_per_pound"
+					}
+				},
+				"cataclysm_types": {
+					"terms": {
+						"field": "cataclysm_types.keyword",
+						"size": 10
+					},
+					"aggs": {
+						"cataclysm_descriptions": {
+							"terms": {
+								"field": "cataclysm_descriptions.keyword",
+								"size": 10
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

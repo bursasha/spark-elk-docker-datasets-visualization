@@ -1,0 +1,51 @@
+version: '3.8'
+
+# Common server network:
+networks:
+
+  elk-network:
+    driver: bridge
+
+# ELK servers architecture:
+services:
+
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:8
+    container_name: elasticsearch
+    restart: unless-stopped
+    volumes:
+      - ./elasticsearch:/bitnami/elasticsearch
+    ports:
+      - 9200:9200
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    networks:
+      - elk-network
+
+  logstash:
+    image: docker.io/bitnami/logstash:8
+    container_name: logstash
+    restart: unless-stopped
+    command: logstash -f /bitnami/logstash/pipeline/logstash.conf
+    volumes:
+      - ./logstash:/bitnami/logstash
+    ports:
+      - 9300:8080
+    networks:
+      - elk-network
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.io/bitnami/kibana:8
+    container_name: kibana
+    restart: unless-stopped
+    ports:
+      - 9400:5601
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - elk-network
+    depends_on:
+      - elasticsearch

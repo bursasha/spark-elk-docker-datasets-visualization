@@ -1,0 +1,35 @@
+# This Elasticsearch query analyzes the "prices-cataclysms-crimes-1975-2020" index 
+to aggregate the top 10 states by total crime count, along with the top three most common 
+crime types and victim groups in each of these states. #
+
+GET /prices-cataclysms-crimes-1975-2020/_search
+{
+	"size": 0,
+	"aggs": {
+		"crime_rates_by_state": {
+			"terms": {
+				"field": "crime_state_names.keyword",
+				"size": 10
+			},
+			"aggs": {
+				"total_crimes": {
+					"sum": {
+						"field": "crime_total_count"
+					}
+				},
+				"most_common_crime": {
+					"terms": {
+						"field": "crime_types.keyword",
+						"size": 3
+					}
+				},
+				"most_common_victim_group": {
+					"terms": {
+						"field": "crime_victim_groups.keyword",
+						"size": 3
+					}
+				}
+			}
+		}
+	}
+}

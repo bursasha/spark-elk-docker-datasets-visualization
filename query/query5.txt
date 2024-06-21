@@ -1,0 +1,56 @@
+# This Elasticsearch query searches the "prices-cataclysms-crimes-1975-2020" index 
+for average annual prices of wheat, coffee, and corn in years with recorded cataclysms 
+described as "Storm" or "Flood". #
+
+GET /prices-cataclysms-crimes-1975-2020/_search
+{
+	"size": 0,
+	"query": {
+		"bool": {
+			"must": [
+				{
+					"bool": {
+						"should": [
+							{
+								"wildcard": {
+									"cataclysm_descriptions.keyword": "*Storm*"
+								}
+							},
+							{
+								"wildcard": {
+									"cataclysm_descriptions.keyword": "*Flood*"
+								}
+							}
+						],
+						"minimum_should_match": 1
+					}
+				}
+			]
+		}
+	},
+	"aggs": {
+		"years_with_cataclysms": {
+			"date_histogram": {
+				"field": "date",
+				"calendar_interval": "1y"
+			},
+			"aggs": {
+				"avg_wheat_price": {
+					"avg": {
+						"field": "wheat_avg_price_per_pound"
+					}
+				},
+				"avg_coffee_price": {
+					"avg": {
+						"field": "coffee_avg_price_per_pound"
+					}
+				},
+				"avg_corn_price": {
+					"avg": {
+						"field": "corn_avg_price_per_pound"
+					}
+				}
+			}
+		}
+	}
+}

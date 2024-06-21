@@ -1,0 +1,93 @@
+{
+	"index_patterns": [
+		"prices-cataclysms-crimes-1975-2020"
+	],
+	"template": {
+		"settings": {
+			"index": {
+				"refresh_interval": "5s"
+			}
+		},
+		"mappings": {
+			"properties": {
+				"date": {
+					"type": "date",
+					"format": "yyyy-MM-dd"
+				},
+				"wheat_avg_price_per_pound": {
+					"type": "float",
+					"ignore_malformed": true
+				},
+				"coffee_avg_price_per_pound": {
+					"type": "float",
+					"ignore_malformed": true
+				},
+				"corn_avg_price_per_pound": {
+					"type": "float",
+					"ignore_malformed": true
+				},
+				"cataclysm_total_count": {
+					"type": "integer",
+					"ignore_malformed": true
+				},
+				"cataclysm_types": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"cataclysm_descriptions": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"crime_total_count": {
+					"type": "integer",
+					"ignore_malformed": true
+				},
+				"crime_total_offender_count": {
+					"type": "integer",
+					"ignore_malformed": true
+				},
+				"crime_total_victim_count": {
+					"type": "integer",
+					"ignore_malformed": true
+				},
+				"crime_state_names": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"crime_types": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				},
+				"crime_victim_groups": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword",
+							"ignore_above": 256
+						}
+					}
+				}
+			}
+		}
+	}
+}
