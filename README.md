@@ -2,7 +2,7 @@
 
 ### **How To Setup Access Rights?** 🗝️
 ```bash
-chmod -R 777 ./spark-elk-docker-datasets-visualisation
+chmod -R 777 ./spark-elk-docker-datasets-visualization
 ```
 
 ### **How To Start?** 🆙
